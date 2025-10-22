@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalOTP - Virtual Numbers Worldwide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+
+        .logo span {
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-signup {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            margin-top: 80px;
+        }
+
+        /* Auth Forms */
+        .auth-container {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2d3748;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-switch a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Main Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .welcome-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Buy Number Button */
+        .buy-number-section {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .buy-number-btn {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .buy-number-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Countries Grid */
+        .countries-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .countries-grid.active {
+            display: grid;
+        }
+
+        .country-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .country-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .country-flag {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .country-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .country-price {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Country Selection Modal */
+        .country-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .country-modal.active {
+            display: flex;
+        }
+
+        .country-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .country-modal-flag {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .country-modal-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .country-modal-price {
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            background: #e53e3e;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-buy {
+            background: #48bb78;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* OTP Page */
+        .otp-page {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .otp-page.active {
+            display: block;
+        }
+
+        .otp-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .otp-country {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .virtual-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .otp-box {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .otp-waiting {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+            margin: 20px 0;
+        }
+
+        .otp-timer {
+            font-size: 20px;
+            color: #e53e3e;
+            margin: 15px 0;
+        }
+
+        /* Ads */
+        .ad-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .ad-text {
+            color: #718096;
+            font-style: italic;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 3000;
+        }
+
+        .notification.error {
+            background: #e53e3e;
+        }
+
+        /* Deposit Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: #f7fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .payment-instructions {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .payment-instructions h4 {
+            color: #2f855a;
+            margin-bottom: 10px;
+        }
+
+        .payment-instructions ol {
+            padding-left: 20px;
+        }
+
+        .payment-instructions li {
+            margin-bottom: 8px;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">Global<span>OTP</span></div>
+                <div class="nav-links">
+                    <a href="#services">Services</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#support">Support</a>
+                </div>
+                <div class="auth-buttons">
+                    <button class="btn btn-login" onclick="showLogin()">Login</button>
+                    <button class="btn btn-signup" onclick="showSignup()">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Login Form -->
+            <div class="auth-container">
+                <div id="loginForm" class="auth-form active">
+                    <h2 class="form-title">Login to Your Account</h2>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Username/Email</label>
+                            <input type="text" id="loginUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Login</button>
+                    </form>
+                    <div class="form-switch">
+                        Don't have an account? <a onclick="showSignup()">Sign up here</a>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="signupForm" class="auth-form">
+                    <h2 class="form-title">Create Account</h2>
+                    <form onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="signupUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="signupPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="signupConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </form>
+                    <div class="form-switch">
+                        Already have an account? <a onclick="showLogin()">Login here</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard" class="dashboard">
+                <div class="welcome-section">
+                    <h1>Welcome, <span id="userName">User</span>!</h1>
+                    <p>Get virtual numbers from 20+ countries for OTP verification</p>
+                </div>
+
+                <div class="balance-card">
+                    <h3>Your Balance</h3>
+                    <div class="balance-amount">₹<span id="userBalance">0.00</span></div>
+                    <button class="btn" style="background: rgba(255,255,255,0.2); color: white; margin-top: 15px;" onclick="showDepositModal()">Add Funds</button>
+                </div>
+
+                <!-- Ads -->
+                <div class="ad-container">
+                    <div class="ad-text">🔥 Special Offer: Get 50% bonus on deposits above ₹500! Limited time only!</div>
+                </div>
+
+                <div class="ad-container">
+                    <div class="ad-text">💎 Premium numbers available for business accounts!</div>
+                </div>
+
+                <!-- Buy Number Button -->
+                <div class="buy-number-section">
+                    <button class="buy-number-btn" onclick="showCountries()">BUY NUMBER</button>
+                </div>
+
+                <!-- Countries Grid -->
+                <div id="countriesGrid" class="countries-grid">
+                    <!-- Countries will be loaded here -->
+                </div>
+
+                <!-- OTP Page -->
+                <div id="otpPage" class="otp-page">
+                    <div class="otp-header">
+                        <h2>Your OTP is Ready!</h2>
+                        <div class="otp-country" id="otpPageCountry"></div>
+                        <div class="virtual-number" id="otpPageNumber"></div>
+                    </div>
+                    
+                    <div class="otp-box">
+                        <h3>OTP Status</h3>
+                        <div class="otp-waiting">Waiting your OTP...</div>
+                        <div class="otp-timer" id="otpPageTimer">19s</div>
+                        <p>OTP will be delivered shortly</p>
+                    </div>
+
+                    <button class="btn-primary" onclick="backToDashboard()">Back to Dashboard</button>
+                </div>
+
+                <!-- More Ads -->
+                <div class="ad-container">
+                    <div class="ad-text">🚀 Fastest OTP delivery guaranteed! 99.9% success rate!</div>
+                </div>
+
+                <div class="ad-container">
+                    <div class="ad-text">🌍 Now serving 20+ countries worldwide!</div>
+                </div>
+
+                <div class="ad-container">
+                    <div class="ad-text">⚡ Instant activation - Get your number in seconds!</div>
+                </div>
+
+                <div class="ad-container">
+                    <div class="ad-text">🛡️ 100% secure and anonymous service!</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Country Selection Modal -->
+    <div id="countryModal" class="country-modal">
+        <div class="country-modal-content">
+            <div class="country-modal-flag" id="modalFlag">🇺🇸</div>
+            <div class="country-modal-name" id="modalName">United States</div>
+            <div class="country-modal-price" id="modalPrice">₹25</div>
+            <p>Buy virtual number for OTP verification?</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeCountryModal()">Cancel</button>
+                <button class="btn-buy" onclick="buySelectedNumber()">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <h3>Add Funds to Your Account</h3>
+            
+            <div class="payment-instructions">
+                <h4>Payment Instructions:</h4>
+                <ol>
+                    <li>Scan the QR code with your UPI app</li>
+                    <li>Pay the exact amount you want to deposit</li>
+                    <li>Enter your UTR number below after payment</li>
+                    <li>Click submit to complete the process</li>
+                </ol>
+            </div>
+
+            <img src="qr-code.jpg" class="qr-code" alt="UPI QR Code">
+
+            <div class="form-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="depositAmount" min="100" max="10000" value="500" placeholder="Enter amount">
+            </div>
+
+            <div class="form-group">
+                <label>UTR Number</label>
+                <input type="text" id="utrNumber" placeholder="Enter your UTR number" required>
+            </div>
+
+            <button class="btn-primary" onclick="processDeposit()">Submit UTR Number</button>
+            <button class="btn" style="margin-top: 10px;" onclick="closeDepositModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GlobalOTP. All rights reserved. | Virtual Numbers for OTP Verification</p>
+        </div>
+    </footer>
+
+    <script>
+        // User data storage
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+        let currentUser = null;
+        let selectedCountry = null;
+
+        // Countries data with Indian Rupee prices (20-60 range)
+        const countries = [
+            { code: 'US', name: 'United States', flag: '🇺🇸', price: 45 },
+            { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', price: 50 },
+            { code: 'CA', name: 'Canada', flag: '🇨🇦', price: 42 },
+            { code: 'AU', name: 'Australia', flag: '🇦🇺', price: 55 },
+            { code: 'DE', name: 'Germany', flag: '🇩🇪', price: 48 },
+            { code: 'FR', name: 'France', flag: '🇫🇷', price: 46 },
+            { code: 'JP', name: 'Japan', flag: '🇯🇵', price: 58 },
+            { code: 'SG', name: 'Singapore', flag: '🇸🇬', price: 52 },
+            { code: 'IN', name: 'India', flag: '🇮🇳', price: 20 },
+            { code: 'BR', name: 'Brazil', flag: '🇧🇷', price: 35 },
+            { code: 'RU', name: 'Russia', flag: '🇷🇺', price: 40 },
+            { code: 'KR', name: 'South Korea', flag: '🇰🇷', price: 56 },
+            { code: 'IT', name: 'Italy', flag: '🇮🇹', price: 44 },
+            { code: 'ES', name: 'Spain', flag: '🇪🇸', price: 43 },
+            { code: 'NL', name: 'Netherlands', flag: '🇳🇱', price: 49 },
+            { code: 'SE', name: 'Sweden', flag: '🇸🇪', price: 51 },
+            { code: 'NO', name: 'Norway', flag: '🇳🇴', price: 53 },
+            { code: 'DK', name: 'Denmark', flag: '🇩🇰', price: 52 },
+            { code: 'FI', name: 'Finland', flag: '🇫🇮', price: 50 },
+            { code: 'PL', name: 'Poland', flag: '🇵🇱', price: 38 }
+        ];
+
+        // Services
+        const services = ['Telegram', 'WhatsApp', 'Facebook', 'Google', 'Twitter', 'Instagram', 'Amazon', 'Microsoft'];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCountries();
+            checkLoginStatus();
+        });
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${isError ? 'error' : ''}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').classList.add('active');
+            document.getElementById('signupForm').classList.remove('active');
+        }
+
+        function showSignup() {
+            document.getElementById('signupForm').classList.add('active');
+            document.getElementById('loginForm').classList.remove('active');
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('signupEmail').value;
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match!', true);
+                return;
+            }
+
+            if (users[email]) {
+                showNotification('Email already registered!', true);
+                return;
+            }
+
+            // Save user
+            users[email] = {
+                username: username,
+                password: password,
+                balance: 0,
+                email: email
+            };
+
+            localStorage.setItem('users', JSON.stringify(users));
+            showNotification('Account created successfully! Please login.');
+            showLogin();
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Find user by email or username
+            let user = null;
+            for (let email in users) {
+                if (users[email].email === username || users[email].username === username) {
+                    user = users[email];
+                    break;
+                }
+            }
+
+            if (user && user.password === password) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showDashboard();
+                showNotification('Login successful!');
+            } else {
+                showNotification('Invalid credentials!', true);
+            }
+        }
+
+        function checkLoginStatus() {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showDashboard();
+            }
+        }
+
+        function showDashboard() {
+            document.querySelector('.auth-container').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            document.querySelector('.nav-links').style.display = 'flex';
+            document.querySelector('.auth-buttons').innerHTML = `
+                <button class="btn" onclick="logout()">Logout</button>
+            `;
+            
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('userBalance').textContent = currentUser.balance.toFixed(2);
+            
+            // Hide countries grid and OTP page by default
+            document.getElementById('countriesGrid').classList.remove('active');
+            document.getElementById('otpPage').classList.remove('active');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('dashboard').classList.remove('active');
+            document.querySelector('.auth-container').style.display = 'block';
+            document.querySelector('.auth-buttons').innerHTML = `
+                <button class="btn btn-login" onclick="showLogin()">Login</button>
+                <button class="btn btn-signup" onclick="showSignup()">Sign Up</button>
+            `;
+            showLogin();
+        }
+
+        function loadCountries() {
+            const grid = document.getElementById('countriesGrid');
+            grid.innerHTML = countries.map(country => `
+                <div class="country-card" onclick="selectCountry('${country.code}')">
+                    <div class="country-flag">${country.flag}</div>
+                    <div class="country-name">${country.name}</div>
+                    <div class="country-price">₹${country.price}</div>
+                    <small>Per OTP</small>
+                </div>
+            `).join('');
+        }
+
+        function showCountries() {
+            document.getElementById('countriesGrid').classList.add('active');
+            document.getElementById('otpPage').classList.remove('active');
+        }
+
+        function selectCountry(countryCode) {
+            selectedCountry = countries.find(c => c.code === countryCode);
+            
+            document.getElementById('modalFlag').textContent = selectedCountry.flag;
+            document.getElementById('modalName').textContent = selectedCountry.name;
+            document.getElementById('modalPrice').textContent = `₹${selectedCountry.price}`;
+            
+            document.getElementById('countryModal').classList.add('active');
+        }
+
+        function closeCountryModal() {
+            document.getElementById('countryModal').classList.remove('active');
+            selectedCountry = null;
+        }
+
+        function buySelectedNumber() {
+            if (!currentUser) {
+                showNotification('Please login first!', true);
+                return;
+            }
+
+            if (currentUser.balance < selectedCountry.price) {
+                showNotification('Insufficient balance!', true);
+                closeCountryModal();
+                showDepositModal();
+                return;
+            }
+
+            // Deduct balance
+            currentUser.balance -= selectedCountry.price;
+            users[currentUser.email].balance = currentUser.balance;
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            document.getElementById('userBalance').textContent = currentUser.balance.toFixed(2);
+
+            // Generate virtual number with real country code
+            let countryCode = '';
+            switch(selectedCountry.code) {
+                case 'US': countryCode = '1'; break;
+                case 'GB': countryCode = '44'; break;
+                case 'CA': countryCode = '1'; break;
+                case 'AU': countryCode = '61'; break;
+                case 'DE': countryCode = '49'; break;
+                case 'FR': countryCode = '33'; break;
+                case 'JP': countryCode = '81'; break;
+                case 'SG': countryCode = '65'; break;
+                case 'IN': countryCode = '91'; break;
+                case 'BR': countryCode = '55'; break;
+                case 'RU': countryCode = '7'; break;
+                case 'KR': countryCode = '82'; break;
+                case 'IT': countryCode = '39'; break;
+                case 'ES': countryCode = '34'; break;
+                case 'NL': countryCode = '31'; break;
+                case 'SE': countryCode = '46'; break;
+                case 'NO': countryCode = '47'; break;
+                case 'DK': countryCode = '45'; break;
+                case 'FI': countryCode = '358'; break;
+                case 'PL': countryCode = '48'; break;
+            }
+
+            const virtualNumber = `+${countryCode} ${Math.floor(100 + Math.random() * 900)} ${Math.floor(100 + Math.random() * 900)} ${Math.floor(1000 + Math.random() * 9000)}`;
+
+            // Show OTP page
+            document.getElementById('otpPageCountry').textContent = `${selectedCountry.flag} ${selectedCountry.name}`;
+            document.getElementById('otpPageNumber').textContent = virtualNumber;
+            
+            document.getElementById('countriesGrid').classList.remove('active');
+            document.getElementById('otpPage').classList.add('active');
+            document.getElementById('countryModal').classList.remove('active');
+
+            // Start OTP timer
+            startOTPTimer();
+            
+            showNotification(`Number purchased for ${selectedCountry.name}! OTP will arrive shortly.`);
+        }
+
+        function startOTPTimer() {
+            let timeLeft = 19;
+            const timerElement = document.getElementById('otpPageTimer');
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showNotification('OTP expired!', true);
+                }
+            }, 1000);
+        }
+
+        function backToDashboard() {
+            document.getElementById('otpPage').classList.remove('active');
+            document.getElementById('countriesGrid').classList.remove('active');
+        }
+
+        function showDepositModal() {
+            document.getElementById('depositModal').classList.add('active');
+        }
+
+        function closeDepositModal() {
+            document.getElementById('depositModal').classList.remove('active');
+        }
+
+        function processDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const utrNumber = document.getElementById('utrNumber').value;
+            
+            if (amount < 100) {
+                showNotification('Minimum deposit is ₹100!', true);
+                return;
+            }
+
+            if (!utrNumber) {
+                showNotification('Please enter UTR number!', true);
+                return;
+            }
+
+            // Show pending message - NO BALANCE ADDED
+            showNotification('Your request was pending. Please wait for approval.', false);
+            closeDepositModal();
+
+            // Clear the form
+            document.getElementById('depositAmount').value = '500';
+            document.getElementById('utrNumber').value = '';
+        }
+
+        // Simulate ad changes
+        setInterval(() => {
+            const ads = [
+                "🔥 Special Offer: Get 50% bonus on deposits above ₹500!",
+                "🚀 Fastest OTP delivery guaranteed! 99.9% success rate!",
+                "💎 Premium numbers available for business accounts!",
+                "🌍 Now serving 20+ countries worldwide!",
+                "⚡ Instant activation - Get your number in seconds!",
+                "🛡️ 100% secure and anonymous service!",
+                "📞 24/7 Customer support available!",
+                "🎯 Most reliable OTP service in India!"
+            ];
+            const adElements = document.querySelectorAll('.ad-text');
+            adElements.forEach(el => {
+                el.textContent = ads[Math.floor(Math.random() * ads.length)];
+            });
+        }, 4000);
+    </script>
+</body>
+</html>
